@@ -1,0 +1,188 @@
+/* ================================================
+   MINIMAL RESPONSIVE UTILITIES - Only Used Classes
+   ================================================ */
+
+/* Responsive Spacing */
+.space-fluid-md { padding: clamp(1rem, 3vw, 2rem); }
+
+/* Responsive Typography */
+.text-fluid-sm { font-size: clamp(0.875rem, 2vw, 1rem); }
+.text-fluid-base { font-size: clamp(1rem, 2.5vw, 1.125rem); }
+.text-fluid-2xl { font-size: clamp(1.5rem, 5vw, 2rem); }
+
+/* Container Utilities */
+.container-md { max-width: 50rem; margin: 0 auto; }
+
+/* Responsive Grids */
+.grid-fluid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.grid-fluid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+/* Flexbox Utilities */
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Responsive Gaps */
+.gap-fluid-sm { gap: clamp(0.5rem, 2vw, 1rem); }
+.gap-fluid-md { gap: clamp(1rem, 3vw, 2rem); }
+
+/* ================================================
+   RESPONSIVE UTILITIES - Enhanced with rem/vw/vh
+   ================================================ */
+
+/* Responsive Spacing - Using clamp() for fluid scaling */
+.space-fluid-xs { padding: clamp(0.25rem, 1vw, 0.5rem); }
+.space-fluid-sm { padding: clamp(0.5rem, 2vw, 1rem); }
+.space-fluid-lg { padding: clamp(2rem, 5vw, 4rem); }
+.space-fluid-xl { padding: clamp(3rem, 8vw, 6rem); }
+
+/* Responsive Margins */
+.margin-fluid-xs { margin: clamp(0.25rem, 1vw, 0.5rem); }
+.margin-fluid-sm { margin: clamp(0.5rem, 2vw, 1rem); }
+.margin-fluid-lg { margin: clamp(2rem, 5vw, 4rem); }
+
+/* Responsive Typography */
+.text-fluid-lg { font-size: clamp(1.125rem, 3vw, 1.25rem); }
+.text-fluid-xl { font-size: clamp(1.25rem, 4vw, 1.5rem); }
+.text-fluid-3xl { font-size: clamp(2rem, 6vw, 3rem); }
+
+/* Container Utilities with max-width in rem */
+.container-xs { max-width: 30rem; margin: 0 auto; }
+.container-sm { max-width: 40rem; margin: 0 auto; }
+.container-lg { max-width: 60rem; margin: 0 auto; }
+.container-xl { max-width: 75rem; margin: 0 auto; }
+
+/* Responsive Grids */
+.grid-fluid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+/* Responsive Heights */
+.min-h-screen { min-height: 100vh; }
+.h-screen { height: 100vh; }
+.h-50vh { height: 50vh; }
+.h-75vh { height: 75vh; }
+
+/* Responsive Widths */
+.w-full { width: 100%; }
+.w-90vw { width: 90vw; }
+.w-80vw { width: 80vw; }
+.w-70vw { width: 70vw; }
+.w-50vw { width: 50vw; }
+
+/* Aspect Ratios */
+.aspect-square { aspect-ratio: 1; }
+.aspect-video { aspect-ratio: 16 / 9; }
+.aspect-golden { aspect-ratio: 1.618; }
+
+/* Flexible Positioning */
+.position-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.position-center-x {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.position-center-y {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Modern Flexbox Utilities */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Responsive Gaps */
+.gap-fluid-xs { gap: clamp(0.25rem, 1vw, 0.5rem); }
+.gap-fluid-lg { gap: clamp(2rem, 4vw, 3rem); }
+
+/* Animation Utilities */
+.transition-smooth { 
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+
+.transition-fast { 
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+
+.transition-slow { 
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+
+/* Modern Shadows */
+.shadow-soft {
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05),
+              0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+}
+
+.shadow-floating {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1),
+              0 0.25rem 0.5rem rgba(0, 0, 0, 0.06);
+}
+
+.shadow-elevated {
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15),
+              0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+/* Focus States */
+.focus-ring:focus-visible {
+  outline: 0.125rem solid var(--primary-500);
+  outline-offset: 0.125rem;
+}
+
+/* Print Utilities */
+@media print {
+  .print-hidden { display: none !important; }
+  .print-block { display: block !important; }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .text-muted { color: var(--neutral-900) !important; }
+  .border-subtle { border-color: var(--neutral-900) !important; }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .transition-smooth,
+  .transition-fast,
+  .transition-slow {
+    transition: none !important;
+  }
+} 
