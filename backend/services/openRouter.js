@@ -1,4 +1,5 @@
 import axios from 'axios';
+import logger from './logger.js';
 
 export const parseImageWithLLM = async (imageBuffer) => {
   const base64Image = imageBuffer.toString('base64');
@@ -26,12 +27,12 @@ export const parseImageWithLLM = async (imageBuffer) => {
       }
     });
 
-    console.log('OpenRouter response:', response.data);
+    logger.debug('OpenRouter response:', response.data);
     const content = response.data.choices[0].message.content;
     return JSON.parse(content.replace(/```json\n?|```/g, '').trim());
     
   } catch (error) {
-    console.error('OpenRouter API error:', error.response?.data || error.message);
+    logger.error('OpenRouter API error:', error.response?.data || error.message);
     throw new Error(`LLM parsing failed: ${error.response?.data?.error?.message || error.message}`);
   }
 }; 

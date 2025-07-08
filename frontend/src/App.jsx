@@ -16,20 +16,25 @@ export default function App() {
 
   return (
     <div className="container">
-      <h1>🧾 PDF Parser</h1>
-      
-      {!parsedData ? (
-        <Upload 
-          onSuccess={handleUploadSuccess} 
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-        />
-      ) : (
-        <FormEditor 
-          initialData={parsedData} 
-          onReset={handleReset}
-        />
-      )}
+      <div className="card">
+        <div className="brand-header">
+          <h1 className="brand-title">BEDA</h1>
+          <p className="brand-subtitle">Different by Design • Intelligent Document Processing</p>
+        </div>
+        
+        {!parsedData ? (
+          <Upload 
+            onSuccess={handleUploadSuccess} 
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+          />
+        ) : (
+          <FormEditor 
+            initialData={parsedData} 
+            onReset={handleReset}
+          />
+        )}
+      </div>
     </div>
   )
 } 

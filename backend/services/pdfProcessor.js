@@ -1,6 +1,7 @@
 import { fromPath } from 'pdf2pic';
 import sharp from 'sharp';
 import fs from 'fs/promises';
+import logger from './logger.js';
 
 export const convertPdfToImage = async (pdfPath) => {
   const convert = fromPath(pdfPath, {
@@ -13,7 +14,7 @@ export const convertPdfToImage = async (pdfPath) => {
   });
 
   const result = await convert(1);
-  console.log('PDF conversion result:', result);
+  logger.debug('PDF conversion result:', result);
   
   // Read the generated image file
   const imagePath = result.path;

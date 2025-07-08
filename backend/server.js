@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDB } from './services/mongodb.js';
 import apiRoutes from './routes/api.js';
+import logger from './services/logger.js';
 
 dotenv.config();
 
@@ -17,5 +18,5 @@ app.use(express.json());
 app.use('/api', apiRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  logger.startup('BEDA Server', PORT);
 }); 
