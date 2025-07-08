@@ -340,6 +340,7 @@ a:focus-visible {
   border-color: var(--primary-700);
   box-shadow: var(--shadow-lg);
   transform: translateY(-1px);
+  color: var(--neutral-0); /* Explicitly ensure white text */
 }
 
 .btn-primary:active {
@@ -357,8 +358,8 @@ a:focus-visible {
 
 .btn-secondary:hover:not(:disabled) {
   background: var(--neutral-50);
-  border-color: var(--neutral-400);
-  color: var(--neutral-800);
+  border-color: var(--primary-300);
+  color: var(--primary-700);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }

@@ -129,421 +129,269 @@ export default function FormEditor({ initialData, onConfirm, onReset, userInfo, 
     
     return (
       <div className="proposal-page" id="proposal-content">
+        {/* Message Alert */}
         {message && (
           <div className={`alert ${message.type === 'success' ? 'alert-success' : 'alert-error'}`}>
             {message.text}
           </div>
         )}
 
-        {/* Enhanced Hero Section */}
-        <div className="proposal-hero-enhanced">
-          <div className="hero-background">
-            <div className="hero-gradient"></div>
-            <div className="hero-pattern"></div>
+        {/* Clean Hero Section */}
+        <div className="proposal-hero-clean">
+          <div className="hero-content-clean">
+            <div className="hero-badge">
+              <SunIcon size={16} />
+              <span>Your Personalized Solar Solution</span>
+            </div>
+            
+            <h1 className="hero-title-clean">
+              Start Saving <span className="savings-amount">${monthlySavings}</span> Every Month
+            </h1>
+            
+            <p className="hero-subtitle">
+              Custom {systemSize}kW solar system for {userInfo?.contactName || formData.customerName}
+            </p>
+
+            {/* Primary CTA */}
+            <div className="hero-actions">
+              <button 
+                onClick={handleDownloadPDF}
+                disabled={isDownloading}
+                className="btn btn-primary btn-xl"
+              >
+                {isDownloading ? <LoadingSpinner size={20} /> : <DownloadIcon size={20} />}
+                <span>{isDownloading ? 'Generating PDF...' : 'Download Your Proposal'}</span>
+              </button>
+              
+              <button 
+                onClick={handleSendEmail}
+                disabled={isEmailing}
+                className="btn btn-secondary btn-lg"
+              >
+                {isEmailing ? <LoadingSpinner size={16} /> : <SaveIcon size={16} />}
+                <span>{isEmailing ? 'Sending...' : 'Email This Proposal'}</span>
+              </button>
+            </div>
           </div>
           
-          <div className="hero-content-enhanced">
-            <div className="hero-main">
-              <div className="hero-badge-enhanced">
-                <SunIcon size={20} />
-                <span>Your Personalized Solar Solution</span>
+          {/* Key Stats Cards */}
+          <div className="stats-overview">
+            <div className="stat-card-primary">
+              <div className="stat-icon">
+                <DollarIcon size={20} />
               </div>
-              
-              <h1 className="hero-title-enhanced">
-                Start Saving <span className="savings-highlight-enhanced">${monthlySavings}</span>
-                <span className="savings-period">every month</span>
-              </h1>
-              
-              <p className="hero-description">
-                Custom-designed {systemSize}kW solar system for {userInfo?.contactName || formData.customerName}
-              </p>
-
-              <div className="savings-callout">
-                <div className="callout-main">
-                  <span className="callout-amount">${Math.round(solarSavings).toLocaleString()}</span>
-                  <span className="callout-label">Annual Savings</span>
-                </div>
-                <div className="callout-sub">
-                  <span>Estimated payback: 6-8 years</span>
-                </div>
+              <div className="stat-content">
+                <div className="stat-number">${Math.round(solarSavings).toLocaleString()}</div>
+                <div className="stat-label">Annual Savings</div>
               </div>
             </div>
-
-            <div className="hero-stats-enhanced">
-              <div className="stat-card">
-                <div className="stat-icon-wrapper">
-                  <SunIcon size={28} />
-                </div>
-                <div className="stat-info">
-                  <div className="stat-number">{systemSize}kW</div>
-                  <div className="stat-label">System Size</div>
-                </div>
+            
+            <div className="stat-card-primary">
+              <div className="stat-icon">
+                <SunIcon size={20} />
               </div>
-              
-              <div className="stat-card">
-                <div className="stat-icon-wrapper">
-                  <DollarIcon size={28} />
-                </div>
-                <div className="stat-info">
-                  <div className="stat-number">${monthlySavings}</div>
-                  <div className="stat-label">Monthly Savings</div>
-                </div>
+              <div className="stat-content">
+                <div className="stat-number">{systemSize}kW</div>
+                <div className="stat-label">System Size</div>
               </div>
-              
-              <div className="stat-card">
-                <div className="stat-icon-wrapper">
-                  <LeafIcon size={28} />
-                </div>
-                <div className="stat-info">
-                  <div className="stat-number">{treesEquivalent}</div>
-                  <div className="stat-label">Trees CO₂ Saved</div>
-                </div>
+            </div>
+            
+            <div className="stat-card-primary">
+              <div className="stat-icon">
+                <LeafIcon size={20} />
+              </div>
+              <div className="stat-content">
+                <div className="stat-number">{treesEquivalent}</div>
+                <div className="stat-label">Trees Equivalent</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Energy Analysis - Redesigned */}
-        <div className="analysis-section-enhanced">
-          <div className="section-header-enhanced">
-            <h2>Your Energy Analysis</h2>
-            <p>Complete breakdown of your current usage and solar potential</p>
-          </div>
-
-          <div className="analysis-grid-enhanced">
-            {/* Current Usage Card */}
-            <div className="analysis-card usage-card">
-              <div className="card-header-enhanced">
-                <div className="card-icon-enhanced">
-                  <LightningIcon size={24} />
-                </div>
-                <div className="card-title-enhanced">
-                  <h3>Current Energy Usage</h3>
-                  <p>{monthlyUsage} kWh per month</p>
-                </div>
-              </div>
-              
-              <div className="usage-breakdown-enhanced">
-                <div className="usage-item-enhanced">
-                  <div className="usage-type">
-                    <span className="usage-dot peak"></span>
-                    <span>Peak Hours</span>
-                  </div>
-                  <div className="usage-amount">{formData.peakUsage} kWh</div>
-                </div>
-                <div className="usage-item-enhanced">
-                  <div className="usage-type">
-                    <span className="usage-dot off-peak"></span>
-                    <span>Off-Peak</span>
-                  </div>
-                  <div className="usage-amount">{formData.offPeakUsage} kWh</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Financial Impact Card */}
-            <div className="analysis-card financial-card">
-              <div className="card-header-enhanced">
-                <div className="card-icon-enhanced">
+        {/* Analysis Grid - Simplified */}
+        <div className="analysis-section">
+          <h2 className="section-title">Your Solar Impact Analysis</h2>
+          
+          <div className="analysis-grid">
+            {/* Financial Analysis */}
+            <div className="analysis-card">
+              <div className="card-header">
+                <div className="card-icon">
                   <DollarIcon size={24} />
                 </div>
-                <div className="card-title-enhanced">
-                  <h3>Financial Impact</h3>
-                  <p>Your potential savings with solar</p>
-                </div>
+                <h3>Financial Impact</h3>
               </div>
               
-              <div className="financial-comparison">
-                <div className="comparison-item before">
-                  <div className="comparison-label">Current Bill</div>
-                  <div className="comparison-amount">${Math.round(annualCost / 12)}</div>
-                  <div className="comparison-period">per month</div>
+              <div className="cost-comparison">
+                <div className="cost-item current">
+                  <span className="cost-label">Current Monthly Bill</span>
+                  <span className="cost-amount">${Math.round(annualCost / 12)}</span>
                 </div>
-                
-                <div className="comparison-arrow">
-                  <div className="arrow-line"></div>
-                  <span>Solar Impact</span>
+                <div className="arrow-down">↓</div>
+                <div className="cost-item future">
+                  <span className="cost-label">With Solar</span>
+                  <span className="cost-amount">${Math.round(annualCost / 12) - monthlySavings}</span>
                 </div>
-                
-                <div className="comparison-item after">
-                  <div className="comparison-label">Future Bill</div>
-                  <div className="comparison-amount">${Math.round(annualCost / 12) - monthlySavings}</div>
-                  <div className="comparison-period">per month</div>
-                </div>
-              </div>
-              
-              <div className="savings-summary">
-                <div className="savings-badge">
-                  Save ${monthlySavings}/month • ${Math.round(solarSavings)}/year
+                <div className="savings-highlight">
+                  Save ${monthlySavings}/month
                 </div>
               </div>
             </div>
 
             {/* Environmental Impact */}
-            <div className="analysis-card environmental-card">
-              <div className="card-header-enhanced">
-                <div className="card-icon-enhanced">
+            <div className="analysis-card">
+              <div className="card-header">
+                <div className="card-icon">
                   <LeafIcon size={24} />
                 </div>
-                <div className="card-title-enhanced">
-                  <h3>Environmental Impact</h3>
-                  <p>Your contribution to sustainability</p>
-                </div>
+                <h3>Environmental Impact</h3>
               </div>
               
               <div className="environmental-metrics">
-                <div className="metric-item">
-                  <div className="metric-number">{co2Reduction}kg</div>
-                  <div className="metric-label">CO₂ Reduced Annually</div>
+                <div className="metric">
+                  <span className="metric-number">{Math.round(co2Reduction / 1000)}t</span>
+                  <span className="metric-label">CO₂ Reduced Annually</span>
                 </div>
-                <div className="metric-divider"></div>
-                <div className="metric-item">
-                  <div className="metric-number">{treesEquivalent}</div>
-                  <div className="metric-label">Tree Equivalents</div>
+                <div className="metric">
+                  <span className="metric-number">{treesEquivalent}</span>
+                  <span className="metric-label">Tree Equivalents</span>
                 </div>
+              </div>
+            </div>
+
+            {/* System Details */}
+            <div className="analysis-card">
+              <div className="card-header">
+                <div className="card-icon">
+                  <LightningIcon size={24} />
+                </div>
+                <h3>System Overview</h3>
               </div>
               
-              <div className="environmental-visual">
-                <div className="trees-visual">
-                  {Array.from({length: Math.min(treesEquivalent, 8)}).map((_, i) => (
-                    <LeafIcon key={i} size={20} className="tree-icon" />
-                  ))}
-                  {treesEquivalent > 8 && <span className="tree-count">+{treesEquivalent - 8}</span>}
+              <div className="system-specs">
+                <div className="spec-row">
+                  <span className="spec-label">System Size</span>
+                  <span className="spec-value">{systemSize}kW</span>
+                </div>
+                <div className="spec-row">
+                  <span className="spec-label">Panel Count</span>
+                  <span className="spec-value">~{Math.round(systemSize * 2.5)}</span>
+                </div>
+                <div className="spec-row">
+                  <span className="spec-label">Roof Coverage</span>
+                  <span className="spec-value">{Math.round(roofArea * 0.85)}m²</span>
+                </div>
+                <div className="payback-info">
+                  <span className="payback-label">Payback Period</span>
+                  <span className="payback-value">6-8 years</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* System Design Section */}
-        <div className="system-section-enhanced">
-          <div className="section-header-enhanced">
-            <h2>Your Solar System Design</h2>
-            <p>Premium components designed for your specific needs</p>
-          </div>
-
-          <div className="system-content-enhanced">
-            <div className="system-overview">
-              <div className="system-main-card">
-                <div className="system-visual">
-                  <div className="system-icon-large">
-                    <SunIcon size={48} />
-                  </div>
-                  <div className="system-details">
-                    <h3>{systemSize}kW Solar System</h3>
-                    <p className="system-description">
-                      High-efficiency monocrystalline panels with premium inverter technology
-                    </p>
-                    <div className="system-warranty">
-                      <span className="warranty-badge">25-Year Warranty</span>
-                      <span className="quality-badge">Tier 1 Panels</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="system-features">
-                  <div className="feature-row">
-                    <span className="feature-check">✓</span>
-                    <span>Premium monocrystalline solar panels</span>
-                  </div>
-                  <div className="feature-row">
-                    <span className="feature-check">✓</span>
-                    <span>Advanced string inverter technology</span>
-                  </div>
-                  <div className="feature-row">
-                    <span className="feature-check">✓</span>
-                    <span>Real-time monitoring system</span>
-                  </div>
-                  <div className="feature-row">
-                    <span className="feature-check">✓</span>
-                    <span>Weather-resistant design</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="system-specs">
-              <div className="spec-card-enhanced">
-                <h4>Roof Analysis</h4>
-                <div className="spec-details">
-                  <div className="spec-item">
-                    <span className="spec-label">Total Roof Area</span>
-                    <span className="spec-value">{roofArea}m²</span>
-                  </div>
-                  <div className="spec-item">
-                    <span className="spec-label">Usable Area</span>
-                    <span className="spec-value">{Math.round(roofArea * 0.85)}m²</span>
-                  </div>
-                  <div className="spec-item">
-                    <span className="spec-label">Panel Count</span>
-                    <span className="spec-value">~{Math.round(systemSize * 2.5)} panels</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="spec-card-enhanced">
-                <h4>Investment Return</h4>
-                <div className="return-visual">
-                  <div className="payback-period">
-                    <span className="payback-years">6-8</span>
-                    <span className="payback-label">years payback</span>
-                  </div>
-                  <div className="lifetime-savings">
-                    <span className="lifetime-amount">${Math.round(solarSavings * 25).toLocaleString()}</span>
-                    <span className="lifetime-label">25-year savings</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Customer Information */}
-        <div className="customer-section-enhanced">
-          <div className="section-header-enhanced">
-            <h2>Installation Details</h2>
-            <p>Everything we need to move forward with your solar installation</p>
-          </div>
-
-          <div className="customer-cards-enhanced">
-            <div className="info-card-enhanced">
+        {/* Installation Information */}
+        <div className="installation-section">
+          <h2 className="section-title">Installation Details</h2>
+          
+          <div className="installation-grid">
+            <div className="info-card">
               <div className="info-header">
-                <HomeIcon size={20} />
-                <h3>Property Information</h3>
+                <HomeIcon size={18} />
+                <h4>Property Information</h4>
               </div>
-              <div className="info-content">
-                <div className="info-row">
-                  <span className="info-label">Customer</span>
-                  <span className="info-value">{formData.customerName}</span>
+              <div className="info-list">
+                <div className="info-item">
+                  <span className="label">Customer</span>
+                  <span className="value">{formData.customerName}</span>
                 </div>
-                <div className="info-row">
-                  <span className="info-label">Property Type</span>
-                  <span className="info-value">{userInfo?.userType?.charAt(0).toUpperCase() + userInfo?.userType?.slice(1) || 'N/A'}</span>
+                <div className="info-item">
+                  <span className="label">Property Type</span>
+                  <span className="value">{userInfo?.userType?.charAt(0).toUpperCase() + userInfo?.userType?.slice(1) || 'N/A'}</span>
                 </div>
-                <div className="info-row">
-                  <span className="info-label">Installation Address</span>
-                  <span className="info-value">{formData.supplyAddress || formData.billingAddress}</span>
+                <div className="info-item">
+                  <span className="label">Address</span>
+                  <span className="value">{formData.supplyAddress || formData.billingAddress}</span>
                 </div>
               </div>
             </div>
 
-            <div className="info-card-enhanced">
+            <div className="info-card">
               <div className="info-header">
-                <LightningIcon size={20} />
-                <h3>Contact Information</h3>
+                <DocumentIcon size={18} />
+                <h4>Contact Information</h4>
               </div>
-              <div className="info-content">
-                <div className="info-row">
-                  <span className="info-label">Contact Name</span>
-                  <span className="info-value">{userInfo?.contactName || 'N/A'}</span>
+              <div className="info-list">
+                <div className="info-item">
+                  <span className="label">Email</span>
+                  <span className="value">{userInfo?.contactEmail || 'Not provided'}</span>
                 </div>
-                <div className="info-row">
-                  <span className="info-label">Email</span>
-                  <span className="info-value">{userInfo?.contactEmail || 'N/A'}</span>
+                <div className="info-item">
+                  <span className="label">Phone</span>
+                  <span className="value">{userInfo?.contactPhone || 'Not provided'}</span>
                 </div>
-                <div className="info-row">
-                  <span className="info-label">Phone</span>
-                  <span className="info-value">{userInfo?.contactPhone || 'N/A'}</span>
+                <div className="info-item">
+                  <span className="label">Best Contact Time</span>
+                  <span className="value">{userInfo?.contactTime || 'Any time'}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Next Steps CTA */}
-        <div className="next-steps-enhanced">
-          <div className="steps-container">
-            <div className="steps-header">
-              <h2>Ready to Start Your Solar Journey?</h2>
-              <p>Here's exactly what happens next:</p>
-            </div>
-            
-            <div className="steps-timeline">
-              <div className="timeline-step">
-                <div className="step-indicator">
-                  <span className="step-number">1</span>
-                </div>
-                <div className="step-content">
-                  <h4>Free Site Assessment</h4>
-                  <p>Professional evaluation of your roof and energy needs</p>
-                </div>
-              </div>
-              
-              <div className="timeline-step">
-                <div className="step-indicator">
-                  <span className="step-number">2</span>
-                </div>
-                <div className="step-content">
-                  <h4>System Design & Approvals</h4>
-                  <p>Custom engineering and permit applications</p>
-                </div>
-              </div>
-              
-              <div className="timeline-step">
-                <div className="step-indicator">
-                  <span className="step-number">3</span>
-                </div>
-                <div className="step-content">
-                  <h4>Rebate Processing</h4>
-                  <p>We handle all government incentive paperwork</p>
-                </div>
-              </div>
-              
-              <div className="timeline-step">
-                <div className="step-indicator">
-                  <span className="step-number">4</span>
-                </div>
-                <div className="step-content">
-                  <h4>Professional Installation</h4>
-                  <p>Certified technicians complete your system</p>
-                </div>
+        {/* Next Steps - Streamlined */}
+        <div className="next-steps">
+          <h2 className="section-title">What Happens Next?</h2>
+          
+          <div className="steps-timeline">
+            <div className="step-item">
+              <div className="step-number">1</div>
+              <div className="step-content">
+                <h4>Free Site Assessment</h4>
+                <p>Professional roof evaluation</p>
               </div>
             </div>
             
-            <div className="timeline-summary">
-              <p><strong>Timeline:</strong> Complete installation typically takes 4-6 weeks from approval</p>
+            <div className="step-item">
+              <div className="step-number">2</div>
+              <div className="step-content">
+                <h4>Custom Design</h4>
+                <p>System optimization & permits</p>
+              </div>
             </div>
+            
+            <div className="step-item">
+              <div className="step-number">3</div>
+              <div className="step-content">
+                <h4>Professional Installation</h4>
+                <p>Certified technician setup</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="timeline-summary">
+            <strong>Timeline:</strong> Complete installation in 4-6 weeks from approval
           </div>
         </div>
 
-        {/* Enhanced Action Buttons */}
-        <div className="proposal-actions-enhanced">
-          <div className="actions-wrapper">
-            <button 
-              onClick={handleDownloadPDF}
-              disabled={isDownloading}
-              className="btn btn-primary btn-lg"
-            >
-              {isDownloading ? <LoadingSpinner size={20} /> : <DownloadIcon size={20} />}
-              <span>{isDownloading ? 'Generating...' : 'Download Proposal'}</span>
-            </button>
-            
-            <button 
-              onClick={handleSendEmail}
-              disabled={isEmailing}
-              className="btn btn-secondary btn-lg"
-            >
-              {isEmailing ? <LoadingSpinner size={20} /> : <SaveIcon size={20} />}
-              <span>{isEmailing ? 'Sending...' : 'Email Proposal'}</span>
-            </button>
-            
-            <button onClick={onReset} className="btn btn-ghost">
-              <RefreshIcon size={20} />
-              <span>Start New Analysis</span>
-            </button>
-          </div>
+        {/* Secondary Actions */}
+        <div className="secondary-actions">
+          <button onClick={onReset} className="btn btn-ghost">
+            <RefreshIcon size={16} />
+            <span>Start New Analysis</span>
+          </button>
         </div>
 
-        {/* Footer */}
-        <div className="proposal-footer-enhanced">
+        {/* Clean Footer */}
+        <div className="proposal-footer">
           <div className="footer-content">
             <div className="footer-brand">
-              <SunIcon size={24} />
+              <SunIcon size={20} />
               <span>BEDA Solar</span>
             </div>
-            <p>Clean Energy Solutions • Powering Australia's Future</p>
-            <div className="footer-date">
-              Proposal generated on {getCurrentDate()}
+            <div className="footer-info">
+              <span>Clean Energy Solutions • Powering Australia's Future</span>
+              <span className="generation-date">Generated {getCurrentDate()}</span>
             </div>
           </div>
         </div>

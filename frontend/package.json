@@ -2,7 +2,7 @@
   "name": "pdf-parser-frontend",
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://<your-username>.github.io/beda",
+  "homepage": "https://rip.github.io/bedasolar",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

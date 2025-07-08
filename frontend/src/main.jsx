@@ -7,7 +7,7 @@ import './styles/design-system.css'
 import './styles/main.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <Router>
+  <Router basename="/bedasolar">
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/app" element={<App />} />

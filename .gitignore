@@ -40,3 +40,4 @@ backend/temp/
 backend/.vscode/
 backend/.idea/
 backend/logs/
+package-lock.json
