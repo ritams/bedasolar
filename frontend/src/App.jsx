@@ -18,8 +18,8 @@ export default function App() {
     <div className="container">
       <div className="card">
         <div className="brand-header">
-          <h1 className="brand-title">BEDA</h1>
-          <p className="brand-subtitle">Different by Design • Intelligent Document Processing</p>
+          <h1 className="brand-title">BEDA SOLAR</h1>
+          <p className="brand-subtitle">Clean Energy Solutions • Solar Onboarding Platform</p>
         </div>
         
         {!parsedData ? (

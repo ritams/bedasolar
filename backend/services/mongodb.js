@@ -1,16 +1,44 @@
 import mongoose from 'mongoose';
 import logger from './logger.js';
 
-const formSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  address: { type: String, required: true },
-  invoiceNumber: { type: String, required: true },
+const electricityBillSchema = new mongoose.Schema({
+  // Customer Information
+  customerName: { type: String, required: true },
+  customerNumber: { type: String, required: true },
+  supplierName: { type: String, default: '' },
+  
+  // Address Information
+  billingAddress: { type: String, required: true },
+  supplyAddress: { type: String, required: true },
+  
+  // Meter Information  
+  nmi: { type: String, required: true }, // National Metering Identifier
+  meterNumber: { type: String, required: true },
+  
+  // Usage Information
+  peakUsage: { type: Number, default: 0 }, // kWh
+  offPeakUsage: { type: Number, default: 0 }, // kWh
+  dailySupplyCharge: { type: Number, default: 0 }, // days
+  
+  // Cost Information
+  totalAmount: { type: Number, required: true }, // $
+  averageDailyUsage: { type: Number, default: 0 }, // kWh
+  averageDailyCost: { type: Number, default: 0 }, // $
+  
+  // Environmental
+  greenhouseGasEmissions: { type: Number, default: 0 }, // kg
+  
+  // Billing Period
+  billingPeriodStart: { type: String, default: '' },
+  billingPeriodEnd: { type: String, default: '' },
+  billingDays: { type: Number, default: 30 },
+  
+  // Metadata
   uploadTimestamp: { type: Date, default: Date.now },
   originalFilename: String
 });
 
-const ParsedForm = mongoose.model('ParsedForm', formSchema);
+const ElectricityBill = mongoose.model('ElectricityBill', electricityBillSchema);
 
 export const connectDB = async () => {
   try {
@@ -24,7 +52,7 @@ export const connectDB = async () => {
 
 export const saveFormData = async (data, filename) => {
   try {
-    const form = new ParsedForm({
+    const form = new ElectricityBill({
       ...data,
       originalFilename: filename
     });

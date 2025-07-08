@@ -1,5 +1,5 @@
 import { uploadPDF } from '../utils/api.js';
-import { DocumentIcon, DownloadIcon, LoadingSpinner } from '../assets/icons/index.js';
+import { DocumentIcon, DownloadIcon, LoadingSpinner, LightningIcon, SearchIcon, SunIcon, CpuIcon } from '../assets/icons/index.js';
 
 export default function Upload({ onSuccess, isLoading, setIsLoading }) {
   
@@ -25,13 +25,28 @@ export default function Upload({ onSuccess, isLoading, setIsLoading }) {
     <div>
       <div className="upload-zone">
         <div className="upload-icon">
-          <DocumentIcon className="upload-document-icon" />
+          <DocumentIcon className="upload-document-icon" size={48} />
         </div>
         
-        <h3 className="upload-title">Upload PDF Document</h3>
+        <h3 className="upload-title">Upload Your Electricity Bill</h3>
         <p className="upload-subtitle">
-          Select a PDF file to extract and process data automatically
+          Upload your latest electricity bill to analyze your energy usage and calculate solar savings
         </p>
+        
+        <div className="upload-features">
+          <div className="feature-item">
+            <LightningIcon size={20} />
+            <span>Multi-page bill support</span>
+          </div>
+          <div className="feature-item">
+            <SearchIcon size={20} />
+            <span>AI-powered data extraction</span>
+          </div>
+          <div className="feature-item">
+            <SunIcon size={20} />
+            <span>Instant solar savings analysis</span>
+          </div>
+        </div>
         
         <input 
           type="file" 
@@ -44,8 +59,12 @@ export default function Upload({ onSuccess, isLoading, setIsLoading }) {
         
         <label htmlFor="file-upload" className={`btn btn-primary ${isLoading ? 'disabled' : ''}`}>
           <DownloadIcon />
-          Choose PDF File
+          Choose Electricity Bill (PDF)
         </label>
+        
+        <p className="upload-note">
+          Supported: PDF files • Multiple pages supported • Secure processing
+        </p>
       </div>
       
       {isLoading && (
@@ -53,7 +72,8 @@ export default function Upload({ onSuccess, isLoading, setIsLoading }) {
           <div className="alert alert-info">
             <div className="alert-content">
               <LoadingSpinner />
-              🤖 Analyzing document with AI • Extracting key information...
+              <CpuIcon size={20} />
+              <span>Analyzing your electricity bill with AI • Extracting usage data for solar analysis...</span>
             </div>
           </div>
         </div>

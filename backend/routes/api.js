@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
-import { convertPdfToImage } from '../services/pdfProcessor.js';
-import { parseImageWithLLM } from '../services/openRouter.js';
+import { convertPdfToImages } from '../services/pdfProcessor.js';
+import { parseImagesWithLLM } from '../services/openRouter.js';
 import { saveFormData } from '../services/mongodb.js';
 import logger from '../services/logger.js';
 import { asyncHandler, handleError } from '../utils/errorHandler.js';
@@ -19,11 +19,11 @@ router.post('/upload', upload.single('pdf'), asyncHandler(async (req, res) => {
   logger.upload(req.file.originalname, 'started', { fileSize: req.file.size });
   
   logger.ai('PDF conversion', 'started');
-  const imageBuffer = await convertPdfToImage(req.file.path);
-  logger.ai('PDF conversion', 'completed');
+  const imageBuffers = await convertPdfToImages(req.file.path);
+  logger.ai('PDF conversion', 'completed', { pageCount: imageBuffers.length });
   
   logger.ai('LLM parsing', 'started');
-  const parsedData = await parseImageWithLLM(imageBuffer);
+  const parsedData = await parseImagesWithLLM(imageBuffers);
   logger.ai('LLM parsing', 'completed', { extractedFields: Object.keys(parsedData).length });
   
   logger.upload(req.file.originalname, 'completed', { processingTime: Date.now() - startTime });

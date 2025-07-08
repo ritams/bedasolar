@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { submitForm } from '../utils/api.js'
 import { downloadProposalAsPDF } from '../utils/download.js'
 import { useMessage } from '../hooks/useMessage.js'
-import { SaveIcon, DocumentIcon, RefreshIcon, LoadingSpinner, DownloadIcon } from '../assets/icons/index.js'
+import { SaveIcon, DocumentIcon, RefreshIcon, LoadingSpinner, DownloadIcon, SunIcon, DollarIcon, LeafIcon, LightningIcon, HomeIcon } from '../assets/icons/index.js'
 
 export default function FormEditor({ initialData, onReset }) {
   const [formData, setFormData] = useState(initialData)
@@ -20,7 +20,7 @@ export default function FormEditor({ initialData, onReset }) {
     setIsSaving(true)
     try {
       await submitForm(formData)
-      showMessage('Data saved successfully!', 'success')
+      showMessage('Electricity bill data saved successfully!', 'success')
     } catch (error) {
       showMessage('Save failed: ' + error.message, 'error')
     } finally {
@@ -30,13 +30,13 @@ export default function FormEditor({ initialData, onReset }) {
 
   const handleGenerateProposal = () => {
     setShowProposal(true)
-    showMessage('Proposal generated successfully!', 'success')
+    showMessage('Solar proposal generated successfully!', 'success')
   }
 
   const handleDownloadPDF = async () => {
     setIsDownloading(true)
     try {
-      await downloadProposalAsPDF('proposal-content', `BEDA-Proposal-${formData.invoiceNumber}.pdf`)
+      await downloadProposalAsPDF('proposal-content', `BEDA-Solar-Proposal-${formData.customerNumber}.pdf`)
       showMessage('PDF downloaded successfully!', 'success')
     } catch (error) {
       showMessage('Download failed: ' + error.message, 'error')
@@ -57,14 +57,27 @@ export default function FormEditor({ initialData, onReset }) {
     })
   }
 
-  // Show proposal preview if generated
+  // Calculate potential solar savings (placeholder calculation)
+  const calculatePotentialSavings = () => {
+    const annualUsage = (formData.averageDailyUsage || 0) * 365
+    const annualCost = (formData.averageDailyCost || 0) * 365
+    const solarSavings = annualCost * 0.7 // Assume 70% savings
+    return { annualUsage, annualCost, solarSavings }
+  }
+
+  // Show solar proposal if generated
   if (showProposal) {
+    const { annualUsage, annualCost, solarSavings } = calculatePotentialSavings()
+    
     return (
       <div>
         <div className="form-header">
-          <h2 className="form-header-title">📄 Generated Proposal Preview</h2>
+          <h2 className="form-header-title">
+            <SunIcon size={32} className="form-header-icon" />
+            BEDA Solar Proposal
+          </h2>
           <p className="form-header-subtitle">
-            Review your proposal exactly as it will appear in the PDF
+            Customized solar solution based on your electricity bill analysis
           </p>
         </div>
 
@@ -79,67 +92,121 @@ export default function FormEditor({ initialData, onReset }) {
             {/* Header Section */}
             <div className="proposal-header">
               <div className="proposal-brand">
-                <h1>BEDA</h1>
-                <p>Different by Design • Professional Document Solutions</p>
+                <h1>BEDA SOLAR</h1>
+                <p>Clean Energy Solutions • Powering Your Future</p>
               </div>
             </div>
 
             {/* Title Section */}
             <div className="proposal-title-section">
-              <h2>BUSINESS PROPOSAL</h2>
+              <h2>SOLAR INSTALLATION PROPOSAL</h2>
               <div className="proposal-date">Generated on {getCurrentDate()}</div>
             </div>
 
-            {/* Client Information */}
+            {/* Customer Information */}
             <div className="proposal-section">
-              <h3>CLIENT INFORMATION</h3>
+              <h3>CUSTOMER INFORMATION</h3>
               <div className="info-grid">
                 <div className="info-item">
-                  <strong>Name:</strong> {formData.name}
+                  <strong>Customer:</strong> {formData.customerName}
                 </div>
                 <div className="info-item">
-                  <strong>Email:</strong> {formData.email}
+                  <strong>Account #:</strong> {formData.customerNumber}
                 </div>
                 <div className="info-item">
-                  <strong>Invoice #:</strong> {formData.invoiceNumber}
+                  <strong>Supplier:</strong> {formData.supplierName}
+                </div>
+                <div className="info-item">
+                  <strong>NMI:</strong> {formData.nmi}
                 </div>
               </div>
             </div>
 
-            {/* Address Section */}
+            {/* Property Information */}
             <div className="proposal-section">
-              <h3>BILLING ADDRESS</h3>
+              <h3>PROPERTY DETAILS</h3>
               <div className="address-box">
-                {formData.address}
+                <strong>Installation Address:</strong><br/>
+                {formData.supplyAddress || formData.billingAddress}
               </div>
             </div>
 
-            {/* Proposal Details */}
+            {/* Energy Analysis */}
             <div className="proposal-section">
-              <h3>PROPOSAL DETAILS</h3>
+              <h3>ENERGY CONSUMPTION ANALYSIS</h3>
+              <div className="energy-stats">
+                <div className="stat-item">
+                  <span className="stat-label">Peak Usage:</span>
+                  <span className="stat-value">{formData.peakUsage} kWh</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Off-Peak Usage:</span>
+                  <span className="stat-value">{formData.offPeakUsage} kWh</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Daily Average:</span>
+                  <span className="stat-value">{formData.averageDailyUsage} kWh</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Daily Cost:</span>
+                  <span className="stat-value">${formData.averageDailyCost}</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Annual Usage:</span>
+                  <span className="stat-value">{annualUsage.toFixed(0)} kWh</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Annual Cost:</span>
+                  <span className="stat-value">${annualCost.toFixed(0)}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Solar Benefits */}
+            <div className="proposal-section">
+              <h3>SOLAR BENEFITS & SAVINGS</h3>
+              <div className="benefits-box">
+                <div className="benefit-item">
+                  <DollarIcon className="benefit-icon" size={24} />
+                  <span><strong>Estimated Annual Savings:</strong> ${solarSavings.toFixed(0)}</span>
+                </div>
+                <div className="benefit-item">
+                  <LeafIcon className="benefit-icon" size={24} />
+                  <span><strong>CO2 Reduction:</strong> {formData.greenhouseGasEmissions}kg+ annually</span>
+                </div>
+                <div className="benefit-item">
+                  <LightningIcon className="benefit-icon" size={24} />
+                  <span><strong>Energy Independence:</strong> Reduce grid dependency by 70%+</span>
+                </div>
+                <div className="benefit-item">
+                  <HomeIcon className="benefit-icon" size={24} />
+                  <span><strong>Property Value:</strong> Increase home value up to 4%</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Next Steps */}
+            <div className="proposal-section">
+              <h3>NEXT STEPS</h3>
               <div className="proposal-text">
-                <p>Dear {formData.name},</p>
-                <p>We are pleased to submit this proposal based on your requirements. Our team at BEDA is committed to delivering exceptional results that exceed your expectations.</p>
-                <p>Please feel free to contact us at {formData.email} for any questions or clarifications.</p>
-              </div>
-            </div>
-
-            {/* Services Section */}
-            <div className="proposal-section">
-              <h3>OUR SERVICES</h3>
-              <div className="services-list">
-                <div className="service-item">✓ Intelligent Document Processing</div>
-                <div className="service-item">✓ AI-Powered Data Extraction</div>
-                <div className="service-item">✓ Professional Proposal Generation</div>
-                <div className="service-item">✓ Streamlined Workflow Solutions</div>
+                <p>Dear {formData.customerName},</p>
+                <p>Based on your electricity bill analysis, BEDA Solar can help you save approximately <strong>${solarSavings.toFixed(0)} annually</strong> with a custom solar installation.</p>
+                <p><strong>Next Steps:</strong></p>
+                <ol>
+                  <li>Schedule free rooftop assessment</li>
+                  <li>Custom system design & quote</li>
+                  <li>Government rebate assistance</li>
+                  <li>Professional installation</li>
+                </ol>
+                <p>Contact us today to start your solar journey!</p>
               </div>
             </div>
 
             {/* Footer */}
             <div className="proposal-footer">
               <div className="footer-content">
-                <p><strong>BEDA - Different by Design</strong></p>
-                <p>Intelligent Document Solutions • Professional Service Excellence</p>
+                <p><strong>BEDA SOLAR - Clean Energy Solutions</strong></p>
+                <p>Contact: 1300-BEDA-SOLAR • info@bedasolar.com.au</p>
               </div>
             </div>
           </div>
@@ -159,19 +226,19 @@ export default function FormEditor({ initialData, onReset }) {
             ) : (
               <>
                 <DownloadIcon />
-                Download PDF
+                Download Solar Proposal
               </>
             )}
           </button>
           
           <button onClick={handleBackToForm} className="btn btn-secondary">
             <RefreshIcon />
-            Edit Form
+            Edit Bill Data
           </button>
           
           <button onClick={onReset} className="btn btn-secondary">
             <RefreshIcon />
-            Start Over
+            Upload New Bill
           </button>
         </div>
       </div>
@@ -181,9 +248,9 @@ export default function FormEditor({ initialData, onReset }) {
   return (
     <div>
       <div className="form-header">
-        <h2 className="form-header-title">📋 Extracted Data</h2>
+        <h2 className="form-header-title">⚡ Electricity Bill Analysis</h2>
         <p className="form-header-subtitle">
-          Review and edit the extracted information before saving or generating proposal
+          Review and edit extracted data from your electricity bill for solar assessment
         </p>
       </div>
 
@@ -194,52 +261,244 @@ export default function FormEditor({ initialData, onReset }) {
       )}
 
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label className="form-label">Name *</label>
-          <input 
-            type="text" 
-            className="form-input"
-            value={formData.name || ''} 
-            onChange={(e) => handleChange('name', e.target.value)}
-            required
-            placeholder="Enter full name"
-          />
+        {/* Customer Information Section */}
+        <div className="form-section">
+          <h3>👤 Customer Information</h3>
+          
+          <div className="form-group">
+            <label className="form-label">Customer Name *</label>
+            <input 
+              type="text" 
+              className="form-input"
+              value={formData.customerName || ''} 
+              onChange={(e) => handleChange('customerName', e.target.value)}
+              required
+              placeholder="Full customer name"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label className="form-label">Customer Number *</label>
+            <input 
+              type="text" 
+              className="form-input"
+              value={formData.customerNumber || ''} 
+              onChange={(e) => handleChange('customerNumber', e.target.value)}
+              required
+              placeholder="Customer account number"
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Electricity Supplier</label>
+            <input 
+              type="text" 
+              className="form-input"
+              value={formData.supplierName || ''} 
+              onChange={(e) => handleChange('supplierName', e.target.value)}
+              placeholder="Energy company name"
+            />
+          </div>
         </div>
-        
-        <div className="form-group">
-          <label className="form-label">Email *</label>
-          <input 
-            type="email" 
-            className="form-input"
-            value={formData.email || ''} 
-            onChange={(e) => handleChange('email', e.target.value)}
-            required
-            placeholder="Enter email address"
-          />
+
+        {/* Address Information Section */}
+        <div className="form-section">
+          <h3>🏠 Property Information</h3>
+          
+          <div className="form-group">
+            <label className="form-label">Billing Address *</label>
+            <textarea 
+              className="form-textarea"
+              value={formData.billingAddress || ''} 
+              onChange={(e) => handleChange('billingAddress', e.target.value)}
+              required
+              rows={2}
+              placeholder="Customer billing address"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label className="form-label">Supply Address *</label>
+            <textarea 
+              className="form-textarea"
+              value={formData.supplyAddress || ''} 
+              onChange={(e) => handleChange('supplyAddress', e.target.value)}
+              required
+              rows={2}
+              placeholder="Electricity supply address (installation location)"
+            />
+          </div>
         </div>
-        
-        <div className="form-group">
-          <label className="form-label">Address *</label>
-          <textarea 
-            className="form-textarea"
-            value={formData.address || ''} 
-            onChange={(e) => handleChange('address', e.target.value)}
-            required
-            rows={3}
-            placeholder="Enter complete address"
-          />
+
+        {/* Meter Information Section */}
+        <div className="form-section">
+          <h3>🔌 Meter Information</h3>
+          
+          <div className="form-group">
+            <label className="form-label">NMI (National Metering Identifier) *</label>
+            <input 
+              type="text" 
+              className="form-input"
+              value={formData.nmi || ''} 
+              onChange={(e) => handleChange('nmi', e.target.value)}
+              required
+              placeholder="10-11 digit NMI number"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label className="form-label">Meter Number *</label>
+            <input 
+              type="text" 
+              className="form-input"
+              value={formData.meterNumber || ''} 
+              onChange={(e) => handleChange('meterNumber', e.target.value)}
+              required
+              placeholder="Electricity meter number"
+            />
+          </div>
         </div>
-        
-        <div className="form-group">
-          <label className="form-label">Invoice Number *</label>
-          <input 
-            type="text" 
-            className="form-input"
-            value={formData.invoiceNumber || ''} 
-            onChange={(e) => handleChange('invoiceNumber', e.target.value)}
-            required
-            placeholder="Enter invoice number"
-          />
+
+        {/* Usage Information Section */}
+        <div className="form-section">
+          <h3>📊 Energy Usage Data</h3>
+          
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Peak Usage (kWh)</label>
+              <input 
+                type="number" 
+                step="0.001"
+                className="form-input"
+                value={formData.peakUsage || ''} 
+                onChange={(e) => handleChange('peakUsage', parseFloat(e.target.value) || 0)}
+                placeholder="0.000"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">Off-Peak Usage (kWh)</label>
+              <input 
+                type="number" 
+                step="0.001"
+                className="form-input"
+                value={formData.offPeakUsage || ''} 
+                onChange={(e) => handleChange('offPeakUsage', parseFloat(e.target.value) || 0)}
+                placeholder="0.000"
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Daily Supply Charge (days)</label>
+              <input 
+                type="number" 
+                className="form-input"
+                value={formData.dailySupplyCharge || ''} 
+                onChange={(e) => handleChange('dailySupplyCharge', parseInt(e.target.value) || 0)}
+                placeholder="30"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">Billing Days</label>
+              <input 
+                type="number" 
+                className="form-input"
+                value={formData.billingDays || ''} 
+                onChange={(e) => handleChange('billingDays', parseInt(e.target.value) || 0)}
+                placeholder="30"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Cost Information Section */}
+        <div className="form-section">
+          <h3>💰 Cost Analysis</h3>
+          
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Total Bill Amount ($) *</label>
+              <input 
+                type="number" 
+                step="0.01"
+                className="form-input"
+                value={formData.totalAmount || ''} 
+                onChange={(e) => handleChange('totalAmount', parseFloat(e.target.value) || 0)}
+                required
+                placeholder="0.00"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">Average Daily Cost ($)</label>
+              <input 
+                type="number" 
+                step="0.01"
+                className="form-input"
+                value={formData.averageDailyCost || ''} 
+                onChange={(e) => handleChange('averageDailyCost', parseFloat(e.target.value) || 0)}
+                placeholder="0.00"
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Average Daily Usage (kWh)</label>
+              <input 
+                type="number" 
+                step="0.001"
+                className="form-input"
+                value={formData.averageDailyUsage || ''} 
+                onChange={(e) => handleChange('averageDailyUsage', parseFloat(e.target.value) || 0)}
+                placeholder="0.000"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">Greenhouse Gas Emissions (kg)</label>
+              <input 
+                type="number" 
+                step="0.001"
+                className="form-input"
+                value={formData.greenhouseGasEmissions || ''} 
+                onChange={(e) => handleChange('greenhouseGasEmissions', parseFloat(e.target.value) || 0)}
+                placeholder="0.000"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Billing Period Section */}
+        <div className="form-section">
+          <h3>📅 Billing Period</h3>
+          
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Billing Period Start</label>
+              <input 
+                type="text" 
+                className="form-input"
+                value={formData.billingPeriodStart || ''} 
+                onChange={(e) => handleChange('billingPeriodStart', e.target.value)}
+                placeholder="e.g., 16 Feb 2025"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">Billing Period End</label>
+              <input 
+                type="text" 
+                className="form-input"
+                value={formData.billingPeriodEnd || ''} 
+                onChange={(e) => handleChange('billingPeriodEnd', e.target.value)}
+                placeholder="e.g., 17 Mar 2025"
+              />
+            </div>
+          </div>
         </div>
         
         <div className="form-actions">
@@ -252,7 +511,7 @@ export default function FormEditor({ initialData, onReset }) {
             ) : (
               <>
                 <SaveIcon />
-                Save Data
+                Save Bill Data
               </>
             )}
           </button>
@@ -263,12 +522,12 @@ export default function FormEditor({ initialData, onReset }) {
             className="btn btn-primary"
           >
             <DocumentIcon size={16} />
-            Generate Proposal
+            Generate Solar Proposal
           </button>
           
           <button type="button" onClick={onReset} className="btn btn-secondary">
             <RefreshIcon />
-            Start Over
+            Upload New Bill
           </button>
         </div>
       </form>
