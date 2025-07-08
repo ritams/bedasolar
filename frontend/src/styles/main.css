@@ -1469,6 +1469,7 @@
   border-bottom: 1px solid var(--neutral-200);
   z-index: 1000;
   transition: all var(--transition-normal);
+  height: 80px;
 }
 
 .header-content-enhanced {
@@ -1478,6 +1479,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-4) var(--space-6);
+  height: 100%;
 }
 
 .logo-enhanced {

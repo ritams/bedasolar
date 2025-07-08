@@ -72,7 +72,7 @@ export default function LandingPage() {
             <a href="#how-it-works" className="nav-link">How It Works</a>
             <a href="#testimonials" className="nav-link">Reviews</a>
             <div className="nav-cta">
-              <Link to="/app" className="btn btn-primary">Get Started</Link>
+              <Link to="/app" className="btn btn-primary btn-sm">Get Started</Link>
             </div>
           </nav>
         </div>
