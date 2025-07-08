@@ -1,0 +1,42 @@
+# Root-level
+node_modules/
+.env
+.DS_Store
+dist/
+build/
+*.log
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS
+Thumbs.db
+ehthumbs.db
+
+#########################
+# Frontend (React/Vite)
+#########################
+frontend/node_modules/
+frontend/.env
+frontend/.DS_Store
+frontend/dist/
+frontend/build/
+
+# IDEs
+frontend/.vscode/
+frontend/.idea/
+
+#########################
+# Backend (Express)
+#########################
+backend/node_modules/
+backend/.env
+backend/.DS_Store
+backend/uploads/
+backend/temp/
+backend/.vscode/
+backend/.idea/
+backend/logs/
