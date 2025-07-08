@@ -21,7 +21,7 @@ const electricityBillSchema = new mongoose.Schema({
   dailySupplyCharge: { type: Number, default: 0 }, // days
   
   // Cost Information
-  totalAmount: { type: Number, required: true }, // $
+  totalBillAmount: { type: Number, required: true }, // $
   averageDailyUsage: { type: Number, default: 0 }, // kWh
   averageDailyCost: { type: Number, default: 0 }, // $
   
@@ -32,6 +32,17 @@ const electricityBillSchema = new mongoose.Schema({
   billingPeriodStart: { type: String, default: '' },
   billingPeriodEnd: { type: String, default: '' },
   billingDays: { type: Number, default: 30 },
+  
+  // User Information
+  userType: { type: String, enum: ['tenant', 'landlord', 'smb'], default: '' },
+  contactName: { type: String, default: '' },
+  contactEmail: { type: String, default: '' },
+  contactPhone: { type: String, default: '' },
+  landlordName: { type: String, default: '' },
+  landlordEmail: { type: String, default: '' },
+  landlordPhone: { type: String, default: '' },
+  futureConsumption: { type: Boolean, default: false },
+  roofArea: { type: Number, default: 0 },
   
   // Metadata
   uploadTimestamp: { type: Date, default: Date.now },
@@ -61,6 +72,26 @@ export const saveFormData = async (data, filename) => {
     return result;
   } catch (error) {
     logger.database('save', 'error', { error: error.message });
+    throw error;
+  }
+};
+
+export const saveUserInfo = async (data) => {
+  try {
+    // Calculate dummy roof area
+    const roofArea = Math.floor(100 + Math.random() * 200);
+    
+    const form = new ElectricityBill({
+      ...data.billData,
+      ...data,
+      roofArea,
+      originalFilename: data.billData?.originalFilename
+    });
+    const result = await form.save();
+    logger.database('user-info-save', 'completed', { recordId: result._id, roofArea });
+    return { ...result.toObject(), roofArea };
+  } catch (error) {
+    logger.database('user-info-save', 'error', { error: error.message });
     throw error;
   }
 }; 

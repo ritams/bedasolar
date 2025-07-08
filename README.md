@@ -2,7 +2,7 @@
 
 Minimal web application for uploading single-page PDFs, parsing with LLM, editing extracted data, and generating proposals.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Install MongoDB
 ```bash
@@ -47,7 +47,7 @@ npm run dev
 
 Visit `http://localhost:3000`
 
-## 🛠️ Usage
+## Usage
 
 1. **Upload PDF**: Choose a single-page PDF file
 2. **Edit Data**: Review and edit extracted fields (name, email, address, invoice number)

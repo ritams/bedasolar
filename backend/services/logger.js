@@ -84,33 +84,33 @@ class Logger {
 
   // Special methods for common use cases
   request(method, path, statusCode, duration, context = {}) {
-    const emoji = statusCode >= 400 ? '❌' : statusCode >= 300 ? '🔄' : '✅';
+    const status = statusCode >= 400 ? '[ERROR]' : statusCode >= 300 ? '[REDIRECT]' : '[SUCCESS]';
     const color = statusCode >= 400 ? chalk.red : statusCode >= 300 ? chalk.yellow : chalk.green;
     
-    const message = `${emoji} ${method} ${path} ${color(statusCode)} - ${duration}ms`;
+    const message = `${status} ${method} ${path} ${color(statusCode)} - ${duration}ms`;
     this.info(message, context);
   }
 
   startup(service, port, context = {}) {
-    const message = `🚀 ${service} started successfully on port ${chalk.cyan(port)}`;
+    const message = `[STARTUP] ${service} started successfully on port ${chalk.cyan(port)}`;
     this.info(message, context);
   }
 
   database(action, status, context = {}) {
-    const emoji = status === 'connected' ? '🗄️' : status === 'error' ? '❌' : '🔄';
-    const message = `${emoji} Database ${action}: ${status}`;
+    const statusLabel = status === 'connected' ? '[CONNECTED]' : status === 'error' ? '[ERROR]' : '[PENDING]';
+    const message = `${statusLabel} Database ${action}: ${status}`;
     this.info(message, context);
   }
 
   upload(filename, status, context = {}) {
-    const emoji = status === 'started' ? '📁' : status === 'completed' ? '✅' : status === 'failed' ? '❌' : '🔄';
-    const message = `${emoji} File upload ${status}: ${filename}`;
+    const statusLabel = status === 'started' ? '[STARTED]' : status === 'completed' ? '[COMPLETED]' : status === 'failed' ? '[FAILED]' : '[PROCESSING]';
+    const message = `${statusLabel} File upload ${status}: ${filename}`;
     this.info(message, context);
   }
 
   ai(action, status, context = {}) {
-    const emoji = status === 'started' ? '🤖' : status === 'completed' ? '✅' : status === 'failed' ? '❌' : '🔄';
-    const message = `${emoji} AI ${action} ${status}`;
+    const statusLabel = status === 'started' ? '[AI-STARTED]' : status === 'completed' ? '[AI-COMPLETED]' : status === 'failed' ? '[AI-FAILED]' : '[AI-PROCESSING]';
+    const message = `${statusLabel} AI ${action} ${status}`;
     this.info(message, context);
   }
 

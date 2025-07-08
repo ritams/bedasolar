@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import { convertPdfToImages } from '../services/pdfProcessor.js';
 import { parseImagesWithLLM } from '../services/openRouter.js';
-import { saveFormData } from '../services/mongodb.js';
+import { saveFormData, saveUserInfo } from '../services/mongodb.js';
 import logger from '../services/logger.js';
 import { asyncHandler, handleError } from '../utils/errorHandler.js';
 
@@ -35,6 +35,22 @@ router.post('/submit', asyncHandler(async (req, res) => {
   const result = await saveFormData(req.body, req.body.originalFilename);
   logger.info('Form submission completed', { recordId: result._id });
   res.json({ status: 'success', _id: result._id });
+}));
+
+router.post('/userinfo', asyncHandler(async (req, res) => {
+  logger.info('User info submission started', { userType: req.body.userType });
+  const result = await saveUserInfo(req.body);
+  logger.info('User info submission completed', { recordId: result._id, roofArea: result.roofArea });
+  res.json({ status: 'success', data: result });
+}));
+
+router.post('/send-email', asyncHandler(async (req, res) => {
+  logger.info('Email send request', { to: req.body.email, type: req.body.type });
+  // Dummy email implementation - would integrate SMTP later
+  setTimeout(() => {
+    logger.info('Email sent successfully (dummy)', { to: req.body.email });
+  }, 1000);
+  res.json({ status: 'success', message: 'Email sent successfully!' });
 }));
 
 // Error handling middleware

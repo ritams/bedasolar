@@ -16,34 +16,51 @@ export const parseImagesWithLLM = async (imageBuffers) => {
           role: "user",
           content: [{
             type: "text",
-            text: `Extract electricity bill information from this image. Return ONLY a JSON object with these exact keys:
+            text: `You are a data extraction system. Extract electricity bill information from this Australian electricity bill image and return ONLY valid JSON. Do not refuse or explain - always return the JSON structure even if some fields are unclear:
+
 {
-  "customerName": "customer full name",
-  "customerNumber": "customer account number", 
-  "supplierName": "electricity supplier company name",
-  "billingAddress": "customer billing address",
-  "supplyAddress": "electricity supply address",
-  "nmi": "National Metering Identifier",
-  "meterNumber": "electricity meter number",
-  "peakUsage": "peak usage in kWh (number only)",
-  "offPeakUsage": "off-peak usage in kWh (number only)",
-  "dailySupplyCharge": "daily supply charge period in days (number only)",
-  "totalAmount": "total bill amount in dollars (number only)",
-  "averageDailyUsage": "average daily usage in kWh (number only)",
-  "averageDailyCost": "average daily cost in dollars (number only)",
-  "greenhouseGasEmissions": "greenhouse gas emissions in kg (number only)",
-  "billingPeriodStart": "billing period start date",
-  "billingPeriodEnd": "billing period end date",
-  "billingDays": "billing period length in days (number only)"
+  "customerName": "full customer name (may appear in header, customer details, or address section)",
+  "customerNumber": "customer/account number (typically 4-12 digits)",
+  "supplierName": "electricity company name (look for logos, headers, company names)",
+  "billingAddress": "customer's billing/mailing address", 
+  "supplyAddress": "electricity supply address (property where electricity is delivered)",
+  "nmi": "National Metering Identifier (10-11 digits, often starts with 6, may be labeled as NMI)",
+  "meterNumber": "electricity meter number (found in meter details/reads section)",
+  "peakUsage": "peak/standard/daytime usage in kWh for the billing period (look in usage tables, billing calculations)",
+  "offPeakUsage": "off-peak/night usage in kWh for the billing period (look in usage tables, billing calculations)", 
+  "dailySupplyCharge": "daily supply charge amount in dollars per day (fixed daily connection fee)",
+  "totalBillAmount": "total bill amount in dollars (Amount Due, Total Due, Amount Payable - the main amount to pay)",
+  "averageDailyUsage": "average daily usage in kWh (may be calculated or stated explicitly)",
+  "averageDailyCost": "average daily cost in dollars (calculate from total amount / billing days if not stated)",
+  "greenhouseGasEmissions": "greenhouse gas emissions in kg (CO2, emissions, environmental impact)",
+  "billingPeriodStart": "billing period start date (extract as YYYY-MM-DD format)",
+  "billingPeriodEnd": "billing period end date (extract as YYYY-MM-DD format)", 
+  "billingDays": "number of days in billing period (typically 28-92 days)"
 }
 
-Only extract values that are clearly visible. Use empty string "" for missing text fields and 0 for missing numbers. No additional text.`
+EXTRACTION GUIDELINES:
+- SCAN THE ENTIRE BILL - information may be in headers, tables, summaries, or detailed sections
+- Look for USAGE TABLES with kWh amounts - these are your peak/off-peak usage values
+- IGNORE meter readings (large numbers like 20000+ that represent cumulative meter totals)
+- Peak usage might be labeled as: Peak, Standard, Daytime, Tariff 1, etc.
+- Off-peak might be labeled as: Off-Peak, Night, Economy, Tariff 2, etc.
+- TOTAL BILL AMOUNT (CRITICAL): Look for the main payment amount - labeled as "Amount Due", "Total Amount", "Balance Due", "Total Charges", "Amount Payable" - usually in a prominent box or summary section
+- Daily supply charge is the fixed daily connection fee (typically $0.50-$2.00 per day)
+- NMI is always 10-11 digits, often highlighted or in a separate box
+- Billing period dates are usually clearly marked - convert to YYYY-MM-DD format
+- DAILY CALCULATIONS (IMPORTANT): If averages aren't shown, calculate them:
+  * averageDailyUsage = (peakUsage + offPeakUsage) ÷ billingDays
+  * averageDailyCost = totalBillAmount ÷ billingDays
+- Use empty string "" for missing text fields and 0 for missing numbers
+- CRITICAL: Return ONLY the JSON object, no explanations, refusals, or other text
+- If image is unclear, still return the JSON structure with empty/zero values
+- Start your response with { and end with }`
           }, {
             type: "image_url",
             image_url: { url: `data:image/png;base64,${base64Image}` }
           }]
         }],
-        max_tokens: 500
+        max_tokens: 1000
       }, {
         headers: {
           'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
@@ -54,8 +71,35 @@ Only extract values that are clearly visible. Use empty string "" for missing te
       });
 
       const content = response.data.choices[0].message.content;
-      const pageResult = JSON.parse(content.replace(/```json\n?|```/g, '').trim());
-      allResults.push(pageResult);
+      logger.debug(`Raw AI response: ${content}`);
+      
+      // Check if response starts with refusal
+      if (content.toLowerCase().includes("i'm unable") || content.toLowerCase().includes("i cannot")) {
+        logger.warn('AI refused to process image, using empty result');
+        allResults.push({
+          customerName: "", customerNumber: "", supplierName: "", billingAddress: "", supplyAddress: "",
+          nmi: "", meterNumber: "", peakUsage: 0, offPeakUsage: 0, dailySupplyCharge: 0,
+          totalBillAmount: 0, averageDailyUsage: 0, averageDailyCost: 0, greenhouseGasEmissions: 0,
+          billingPeriodStart: "", billingPeriodEnd: "", billingDays: 0
+        });
+        continue;
+      }
+      
+      try {
+        const cleanContent = content.replace(/```json\n?|```/g, '').trim();
+        const pageResult = JSON.parse(cleanContent);
+        allResults.push(pageResult);
+      } catch (parseError) {
+        logger.warn(`JSON parse failed for page ${i + 1}: ${parseError.message}`);
+        logger.debug(`Content that failed to parse: ${content}`);
+        // Use empty result for this page
+        allResults.push({
+          customerName: "", customerNumber: "", supplierName: "", billingAddress: "", supplyAddress: "",
+          nmi: "", meterNumber: "", peakUsage: 0, offPeakUsage: 0, dailySupplyCharge: 0,
+          totalBillAmount: 0, averageDailyUsage: 0, averageDailyCost: 0, greenhouseGasEmissions: 0,
+          billingPeriodStart: "", billingPeriodEnd: "", billingDays: 0
+        });
+      }
     }
     
     // Combine results from all pages (take non-empty values)
@@ -66,7 +110,15 @@ Only extract values that are clearly visible. Use empty string "" for missing te
     
   } catch (error) {
     logger.error('OpenRouter API error:', error.response?.data || error.message);
-    throw new Error(`LLM parsing failed: ${error.response?.data?.error?.message || error.message}`);
+    
+    // Return empty result instead of throwing error to prevent complete failure
+    logger.warn('Returning empty extraction result due to API error');
+    return {
+      customerName: "", customerNumber: "", supplierName: "", billingAddress: "", supplyAddress: "",
+      nmi: "", meterNumber: "", peakUsage: 0, offPeakUsage: 0, dailySupplyCharge: 0,
+      totalBillAmount: 0, averageDailyUsage: 0, averageDailyCost: 0, greenhouseGasEmissions: 0,
+      billingPeriodStart: "", billingPeriodEnd: "", billingDays: 0
+    };
   }
 };
 
@@ -83,7 +135,7 @@ const combineMultiPageResults = (results) => {
     peakUsage: 0,
     offPeakUsage: 0,
     dailySupplyCharge: 0,
-    totalAmount: 0,
+    totalBillAmount: 0,
     averageDailyUsage: 0,
     averageDailyCost: 0,
     greenhouseGasEmissions: 0,
@@ -99,11 +151,48 @@ const combineMultiPageResults = (results) => {
         if (typeof combined[key] === 'string' && result[key] !== "") {
           combined[key] = result[key];
         } else if (typeof combined[key] === 'number' && result[key] > 0) {
-          combined[key] = result[key];
+          let value = result[key];
+          
+          // Validate and correct unrealistic values
+          if (key === 'peakUsage' || key === 'offPeakUsage') {
+            // If usage is over 10,000 kWh, likely in Wh - convert to kWh
+            if (value > 10000) {
+              value = value / 1000;
+              logger.debug(`Converted ${key} from ${result[key]} Wh to ${value} kWh`);
+            }
+            // Cap at reasonable max (5000 kWh per billing period)
+            if (value > 5000) {
+              logger.warn(`Unrealistic ${key}: ${value} kWh, setting to 0`);
+              value = 0;
+            }
+          }
+          
+          if (key === 'averageDailyUsage' && value > 100) {
+            logger.warn(`Unrealistic daily usage: ${value} kWh, setting to 0`);
+            value = 0;
+          }
+          
+          if (key === 'averageDailyCost' && value > 100) {
+            logger.warn(`Unrealistic daily cost: $${value}, setting to 0`);
+            value = 0;
+          }
+          
+          if (key === 'billingDays' && (value > 365 || value < 1)) {
+            logger.warn(`Unrealistic billing days: ${value}, setting to 30`);
+            value = 30;
+          }
+          
+          combined[key] = value;
         }
       }
     });
   });
+  
+  // If billing address is empty, use supply address
+  if (!combined.billingAddress && combined.supplyAddress) {
+    combined.billingAddress = combined.supplyAddress;
+    logger.debug('Set billing address to match supply address');
+  }
   
   return combined;
 }; 

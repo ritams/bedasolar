@@ -120,7 +120,7 @@ name, email, address, invoiceNumber.
 
 ---
 
-## 🛠️ Template for Proposal
+## Template for Proposal
 
 **PDF and HTML will follow this structure:**
 
@@ -157,7 +157,7 @@ PORT=3001
 
 ---
 
-## 🚫 Non-Requirements (For MVP)
+## Non-Requirements (For MVP)
 
 * No user login/authentication
 * No multi-page PDF support

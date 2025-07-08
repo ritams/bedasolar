@@ -12,4 +12,8 @@ export const uploadPDF = (file) => {
 
 export const submitForm = (data) => api.post('/submit', data);
 
+export const submitUserInfo = (data) => api.post('/userinfo', data);
+
+export const sendEmail = (data) => api.post('/send-email', data);
+
 export default api; 
