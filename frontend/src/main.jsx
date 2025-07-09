@@ -8,9 +8,12 @@ import './styles/design-system.css'
 import './styles/utilities.css'
 import './styles/main.css'
 
+// Use conditional basename: "/bedasolar" for production (GitHub Pages), "/" for local development
+const basename = import.meta.env.PROD ? '/bedasolar' : '/'
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ErrorBoundary>
-    <Router basename="/bedasolar">
+    <Router basename={basename}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/app" element={<App />} />

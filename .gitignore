@@ -43,3 +43,4 @@ backend/logs/
 package-lock.json
 temp/
 backend/temp/
+secrets*

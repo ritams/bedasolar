@@ -34,7 +34,8 @@ export default function RoofCalculation({ userInfo, address, onConfirm, onBack }
         </p>
       </div>
 
-      <div className="roof-analysis">
+      <div className="modern-form">
+        {/* Property Address Section */}
         <div className="form-floating-section">
           <h2 className="section-title">
             <HomeIcon size={20} />
@@ -43,45 +44,64 @@ export default function RoofCalculation({ userInfo, address, onConfirm, onBack }
           <div className="address-box">{address}</div>
         </div>
 
-        <div className="map-container">
-          {isCalculating ? (
-            <div className="calculating-state">
-              <LoadingSpinner size={48} />
-              <h3>Analyzing Roof Area...</h3>
-              <p>Processing satellite imagery and calculating optimal solar panel placement</p>
-              <div className="progress-steps">
-                <div className="step active">Satellite Data</div>
-                <div className="step active">Roof Detection</div>
-                <div className="step">Area Calculation</div>
+        {/* Satellite Analysis Section */}
+        <div className="form-floating-section">
+          <h2 className="section-title">
+            Satellite Analysis
+          </h2>
+          
+          <div className="map-container">
+            {isCalculating ? (
+              <div className="calculating-state">
+                <LoadingSpinner size={48} />
+                <h3>Analyzing Roof Area...</h3>
+                <p>Processing satellite imagery and calculating optimal solar panel placement</p>
+                <div className="progress-steps">
+                  <div className="step active">Satellite Data</div>
+                  <div className="step active">Roof Detection</div>
+                  <div className="step">Area Calculation</div>
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="map-result">
-              <div className="map-placeholder">
-                <div className="roof-outline">
-                  <div className="roof-area">
-                    {roofArea}m²
+            ) : (
+              <div className="map-result">
+                <div className="map-placeholder">
+                  <div className="roof-outline">
+                    <div className="roof-area">
+                      {roofArea}m²
+                    </div>
                   </div>
-                </div>
-                <p className="map-caption">Satellite view with roof area highlighted</p>
-              </div>
-              
-              <div className="calculation-summary">
-                <h3>Calculation Results</h3>
-                <div className="result-item">
-                  <strong>Total Roof Area:</strong> {roofArea}m²
-                </div>
-                <div className="result-item">
-                  <strong>Usable Area (85%):</strong> {Math.floor(roofArea * 0.85)}m²
-                </div>
-                <div className="result-item">
-                  <strong>Est. Panel Capacity:</strong> {Math.floor(roofArea * 0.85 / 2)}kW
+                  <p className="map-caption">Satellite view with roof area highlighted</p>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
+        {/* Calculation Results Section */}
+        {!isCalculating && (
+          <div className="form-floating-section">
+            <h2 className="section-title">
+              Calculation Results
+            </h2>
+            
+            <div className="form-grid-3">
+              <div className="result-card">
+                <strong className="result-label">Total Roof Area:</strong>
+                <span className="result-value">{roofArea}m²</span>
+              </div>
+              <div className="result-card">
+                <strong className="result-label">Usable Area (85%):</strong>
+                <span className="result-value">{Math.floor(roofArea * 0.85)}m²</span>
+              </div>
+              <div className="result-card">
+                <strong className="result-label">Est. Panel Capacity:</strong>
+                <span className="result-value">{Math.floor(roofArea * 0.85 / 2)}kW</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Adjustment Section */}
         {!isCalculating && (
           <div className="form-floating-section">
             <h3 className="section-title">Adjust Roof Area</h3>
@@ -105,20 +125,20 @@ export default function RoofCalculation({ userInfo, address, onConfirm, onBack }
             </div>
           </div>
         )}
-      </div>
 
-      <div className="form-actions-floating">
-        <button type="button" className="btn btn-secondary" onClick={onBack}>
-          Back
-        </button>
-        <button 
-          type="button" 
-          className="btn btn-primary" 
-          onClick={handleConfirm}
-          disabled={isCalculating}
-        >
-          {isCalculating ? 'Calculating...' : 'Confirm & Continue'}
-        </button>
+        <div className="form-actions-floating">
+          <button type="button" className="btn btn-secondary" onClick={onBack}>
+            Back
+          </button>
+          <button 
+            type="button" 
+            className="btn btn-primary" 
+            onClick={handleConfirm}
+            disabled={isCalculating}
+          >
+            {isCalculating ? 'Calculating...' : 'Confirm & Continue'}
+          </button>
+        </div>
       </div>
     </div>
   )

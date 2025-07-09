@@ -1702,6 +1702,39 @@
   font-weight: var(--font-weight-semibold);
 }
 
+/* Result Cards for Roof Calculation */
+.result-card {
+  background: var(--neutral-50);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  text-align: center;
+  transition: all var(--transition-normal);
+}
+
+.result-card:hover {
+  background: var(--primary-50);
+  border-color: var(--primary-200);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.result-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  color: var(--neutral-600);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-2);
+}
+
+.result-value {
+  display: block;
+  font-size: var(--font-size-xl);
+  color: var(--primary-600);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-family-heading);
+}
+
 /* ================================================
    LANDING PAGE ENHANCED COMPONENTS
    ================================================ */
@@ -1787,6 +1820,12 @@
   display: flex;
   justify-content: center;
   margin: 0 var(--space-8);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
 }
 
 /* Enhanced Hero Section */
@@ -3111,4 +3150,334 @@ textarea:focus-visible,
 
 .link-group a:hover {
   color: var(--neutral-0); /* Changed to white for maximum contrast on hover */
+}
+
+/* ================================================
+   AUTHENTICATION STYLES
+   ================================================ */
+
+/* Login Page */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-container {
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-6);
+  z-index: 10;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.login-header {
+  margin-bottom: var(--space-8);
+}
+
+.login-header .logo-enhanced {
+  justify-content: center;
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-2xl);
+}
+
+.login-header h1 {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--neutral-900);
+  margin-bottom: var(--space-2);
+}
+
+.login-header p {
+  color: var(--neutral-600);
+  font-size: var(--font-size-lg);
+  line-height: 1.6;
+}
+
+.google-login-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  background: var(--neutral-0);
+  border: 2px solid var(--neutral-300);
+  color: var(--neutral-700);
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  margin-bottom: var(--space-6);
+}
+
+.google-login-btn:hover {
+  background: var(--neutral-50);
+  border-color: var(--neutral-400);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.google-login-btn:active {
+  transform: translateY(0);
+}
+
+.login-footer {
+  color: var(--neutral-500);
+  font-size: var(--font-size-sm);
+}
+
+.error-message {
+  background: var(--error-50);
+  border: 1px solid var(--error-200);
+  color: var(--error-700);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-6);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: var(--space-4);
+}
+
+.loading-container p {
+  color: var(--neutral-600);
+  font-size: var(--font-size-lg);
+}
+
+/* Enhanced User Profile Component */
+.user-profile-enhanced {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profile-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: none;
+  border: none;
+  padding: var(--space-2);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.profile-trigger:hover {
+  background: var(--neutral-100);
+}
+
+.user-avatar-container {
+  position: relative;
+  width: 36px;
+  height: 36px;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--neutral-200);
+  object-fit: cover;
+}
+
+.user-avatar-initials {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--primary-500);
+  color: var(--neutral-0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  border: 2px solid var(--neutral-200);
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.user-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--neutral-900);
+}
+
+.user-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--neutral-500);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--success-500);
+}
+
+.profile-chevron {
+  color: var(--neutral-400);
+  transition: transform var(--transition-normal);
+}
+
+.profile-trigger:hover .profile-chevron {
+  transform: rotate(180deg);
+}
+
+/* Profile Dropdown */
+.profile-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: var(--space-2);
+  background: var(--neutral-0);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  min-width: 220px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdown-header {
+  padding: var(--space-4);
+  background: var(--neutral-50);
+}
+
+.user-info-full .full-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--neutral-900);
+  display: block;
+}
+
+.user-info-full .user-email {
+  font-size: var(--font-size-xs);
+  color: var(--neutral-600);
+  display: block;
+  margin-top: var(--space-1);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--neutral-200);
+}
+
+.dropdown-actions {
+  padding: var(--space-2);
+}
+
+.dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--neutral-700);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-align: left;
+}
+
+.dropdown-item:hover:not(:disabled) {
+  background: var(--neutral-100);
+  color: var(--neutral-900);
+}
+
+.dropdown-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dropdown-item.logout-item {
+  color: var(--error-600);
+}
+
+.dropdown-item.logout-item:hover {
+  background: var(--error-50);
+  color: var(--error-700);
+}
+
+.coming-soon {
+  margin-left: auto;
+  font-size: var(--font-size-xs);
+  background: var(--neutral-200);
+  color: var(--neutral-600);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    padding: var(--space-6);
+    margin: var(--space-4);
+  }
+  
+  .login-header h1 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .user-details {
+    display: none;
+  }
+  
+  .profile-trigger {
+    gap: var(--space-2);
+    padding: var(--space-1);
+  }
+  
+  .profile-dropdown {
+    right: 0;
+    left: auto;
+    min-width: 200px;
+  }
+  
+  .header-actions {
+    gap: var(--space-2);
+  }
+  
+  .header-actions .nav-enhanced {
+    gap: var(--space-2);
+  }
+  
+  .header-actions .btn {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-xs);
+  }
 }
