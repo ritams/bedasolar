@@ -14,8 +14,14 @@ export const convertPdfToImages = async (pdfPath) => {
   });
 
   try {
-    // Convert all pages (pdf2pic automatically handles multiple pages)
-    const results = await convert.bulk(-1); // -1 means all pages
+    // Convert all pages
+    const results = await convert.bulk(-1);
+    
+    // Check page count
+    if (results.length > 5) {
+      throw new Error(`PDF has ${results.length} pages. Maximum allowed is 5 pages.`);
+    }
+    
     logger.debug('PDF conversion results:', { pageCount: results.length });
     
     const imageBuffers = [];
