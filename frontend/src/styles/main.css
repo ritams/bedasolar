@@ -1763,7 +1763,7 @@
 .nav-enhanced .btn-primary:hover {
   color: var(--neutral-0) !important; /* Force white text on hover */
   background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%) !important;
-  border-color: var(--primary-700) !important;
+  border: none !important;
 }
 
 .nav-link {
@@ -1960,7 +1960,7 @@
 .hero-actions-enhanced .btn-primary:hover {
   color: var(--neutral-0) !important; /* Force white text on hover */
   background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%) !important;
-  border-color: var(--primary-700) !important;
+  border: none !important;
 }
 
 .hero-actions-enhanced .btn-secondary:hover {
@@ -3028,12 +3028,13 @@ input[type="button"],
   min-width: 44px;
 }
 
-/* Defensive styling to ensure all primary buttons maintain white text on hover */
+/* Defensive styling to ensure all primary buttons maintain white text on hover and no borders */
 .btn-primary,
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active {
   color: var(--neutral-0) !important;
+  border: none !important;
 }
 
 /* Enhanced focus states for better accessibility */

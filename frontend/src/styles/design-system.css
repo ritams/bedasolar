@@ -331,13 +331,13 @@ a:focus-visible {
 .btn-primary {
   background: var(--gradient-primary);
   color: var(--neutral-0);
-  border-color: var(--primary-600);
+  border: none;
   box-shadow: var(--shadow-md);
 }
 
 .btn-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
-  border-color: var(--primary-700);
+  border: none;
   box-shadow: var(--shadow-lg);
   transform: translateY(-1px);
   color: var(--neutral-0); /* Explicitly ensure white text */
